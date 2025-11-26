@@ -98,9 +98,46 @@ describe('Viem KMS Signer', () => {
       const account = await signer.getAccount();
 
       expect(account.address).toBe(expectedAddress);
+      expect(account.sign).toBeDefined();
       expect(account.signMessage).toBeDefined();
       expect(account.signTransaction).toBeDefined();
       expect(account.signTypedData).toBeDefined();
+    });
+  });
+
+  describe('Account - Sign', () => {
+    it('Should sign hash', async () => {
+      const expectedAddress = '0xe94e130546485b928c9c9b9a5e69eb787172952e';
+      const hash =
+        '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
+      const pubKey = Uint8Array.from(
+        Buffer.from(
+          'eafb54d808f29324e8bb65ac7b8e71531e67473dee2d48724624decc58c268a4',
+          'hex',
+        ),
+      );
+
+      jest.spyOn(utils, 'getPublicKey').mockImplementation(() => {
+        return {
+          PublicKey: pubKey,
+        } as any;
+      });
+      jest
+        .spyOn(utils, 'getEthereumAddress')
+        .mockImplementation(() => expectedAddress);
+      jest
+        .spyOn(utils, 'signDigestHex')
+        .mockImplementation(() => '0xsig' as any);
+
+      const account = await signer.getAccount();
+      const sig = await account.sign({ hash });
+
+      expect(sig).toBe('0xsig');
+      expect(utils.signDigestHex).toHaveBeenCalledWith(
+        hash,
+        credentials,
+        expectedAddress,
+      );
     });
   });
 
@@ -140,7 +177,7 @@ describe('Viem KMS Signer', () => {
   });
 
   describe('Account - Sign Transaction', () => {
-    it('Should sign message', async () => {
+    it('Should sign transaction', async () => {
       const expectedAddress = '0xe94e130546485b928c9c9b9a5e69eb787172952e';
       const pubKey = Uint8Array.from(
         Buffer.from(
@@ -178,7 +215,7 @@ describe('Viem KMS Signer', () => {
   });
 
   describe('Account - Sign Typed Data', () => {
-    it('Should sign message', async () => {
+    it('Should sign typed data', async () => {
       const expectedAddress = '0xe94e130546485b928c9c9b9a5e69eb787172952e';
       const pubKey = Uint8Array.from(
         Buffer.from(

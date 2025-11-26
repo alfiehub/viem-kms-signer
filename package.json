@@ -14,10 +14,10 @@
   "author": "Jack Chuma",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-kms": "^3.499.0",
+    "@aws-sdk/client-kms": "^3.940.0",
     "asn1.js": "^5.4.1",
-    "bn.js": "^5.2.1",
-    "viem": "^2.5.0"
+    "bn.js": "^5.2.2",
+    "viem": "^2.39.0"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.5",

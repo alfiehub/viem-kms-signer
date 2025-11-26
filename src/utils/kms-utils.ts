@@ -72,7 +72,7 @@ async function sign(
   const input: SignCommandInput = {
     // key id or 'Alias/<alias>'
     KeyId: kmsCredentials.keyId,
-    Message: digest,
+    Message: new Uint8Array(digest),
     // 'ECDSA_SHA_256' is the one compatible with ECC_SECG_P256K1.
     SigningAlgorithm: 'ECDSA_SHA_256',
     MessageType: 'DIGEST',
